@@ -141,6 +141,50 @@ add_action('wp_head', function () {
     );
 }, 1);
 
+/**
+ * Widget de comentários e likes (Story 3.8).
+ *
+ * `wp-element` como dependência — o React do core do WordPress. É literalmente
+ * o que decide se o widget cabe no orçamento de 80 KB: embarcar uma segunda
+ * cópia do React custaria mais que todo o resto do bundle.
+ *
+ * O que o widget recebe do PHP: a base da API, o slug e o `wp_post_id`. **Nada
+ * de dado pessoal atravessa nesta direção** — nome, e-mail, IP e conteúdo de
+ * comentário vivem só no Django. O WordPress não recebe, não armazena e não
+ * enxerga nenhum deles.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (! is_singular('post')) {
+        return;
+    }
+
+    $asset = CLAMA_THEME_DIR . '/assets/widget/widget-engajamento/index.asset.php';
+
+    if (! file_exists($asset)) {
+        return;
+    }
+
+    $meta = require $asset;
+
+    wp_enqueue_script(
+        'clama-widget-engajamento',
+        get_template_directory_uri() . '/assets/widget/widget-engajamento/index.js',
+        $meta['dependencies'],
+        $meta['version'],
+        ['strategy' => 'defer', 'in_footer' => true],
+    );
+
+    wp_localize_script('clama-widget-engajamento', 'clamaWidget', [
+        // Vazio = mesma origem. O rewrite de `/api/*` da Story 1.2 é o que
+        // torna a API same-origin e elimina o preflight de CORS — o ganho
+        // **não** vem do rewrite do blog.
+        'apiBase' => '',
+        'postSlug' => get_post_field('post_name', get_the_ID()),
+        'wpPostId' => get_the_ID(),
+        'loginUrl' => '/login',
+    ]);
+});
+
 /** Emojis do core custam um script e uma requisição de sprite. Não usamos. */
 add_action('init', function () {
     remove_action('wp_head', 'print_emoji_detection_script', 7);
