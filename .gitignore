@@ -32,3 +32,6 @@ phpunit.xml
 
 # WP-CLI
 wp-cli.local.yml
+
+# Tema: dependências de build não vão para o repositório
+web/app/themes/*/node_modules/

@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * As quatro classes semânticas que os mockups usam e que não têm definição
+ * em lugar nenhum do projeto (Story 2.5).
+ *
+ * Os valores abaixo foram lidos do dump de estilo computado dos exports em
+ * `clama-docs/blog-design/`, não inventados. O dump serve para ler valores
+ * resolvidos; o que não se copia dele é o inline style, que é um snapshot
+ * achatado de ~300 elementos.
+ */
+
+@layer components {
+  /* Kicker/eyebrow. Valores resolvidos do export. */
+  .eyebrow {
+    color: #d4a017;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.42px;
+    line-height: 16.5px;
+    text-transform: uppercase;
+  }
+
+  /* Brilho radial decorativo do topo. Sempre com aria-hidden. */
+  .gold-halo {
+    background-image:
+      radial-gradient(60% 50% at 50% 0%, rgba(240, 192, 64, 0.12), rgba(0, 0, 0, 0) 70%),
+      radial-gradient(40% 30% at 30% 20%, rgba(212, 160, 23, 0.08), rgba(0, 0, 0, 0) 70%);
+  }
+
+  /**
+   * Placeholders de imagem de capa. Cada post sem `imagem_capa` recebe um
+   * dos seis, escolhido de forma determinística pelo ID — assim o mesmo post
+   * mantém o mesmo gradiente entre visitas e entre a listagem e o detalhe.
+   */
+  .img-placeholder-1 {
+    background-image:
+      radial-gradient(50% 70% at 50% 75%, rgba(240, 192, 64, 0.55), rgba(0, 0, 0, 0) 60%),
+      radial-gradient(30% 50% at 50% 60%, rgba(253, 248, 240, 0.18), rgba(0, 0, 0, 0) 70%),
+      linear-gradient(rgb(42, 26, 64), rgb(17, 7, 32));
+  }
+
+  .img-placeholder-2 {
+    background-image:
+      radial-gradient(60% 50% at 25% 35%, rgba(240, 192, 64, 0.4), rgba(0, 0, 0, 0) 60%),
+      radial-gradient(50% 60% at 75% 65%, rgba(124, 80, 200, 0.35), rgba(0, 0, 0, 0) 60%),
+      linear-gradient(135deg, rgb(26, 10, 46), rgb(42, 26, 64));
+  }
+
+  .img-placeholder-3 {
+    background-image:
+      radial-gradient(80% 60% at 50% 100%, rgba(212, 160, 23, 0.5), rgba(0, 0, 0, 0) 60%),
+      linear-gradient(rgb(17, 7, 32) 0%, rgb(26, 10, 46) 60%, rgb(42, 26, 64) 100%);
+  }
+
+  .img-placeholder-4 {
+    background-image:
+      conic-gradient(from 220deg at 70% 30%, rgba(240, 192, 64, 0.35), rgba(0, 0, 0, 0) 30%, rgba(124, 80, 200, 0.25), rgba(0, 0, 0, 0) 70%),
+      linear-gradient(rgb(26, 10, 46), rgb(17, 7, 32));
+  }
+
+  .img-placeholder-5 {
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(240, 192, 64, 0.35), rgba(0, 0, 0, 0) 50%),
+      radial-gradient(circle at 80% 30%, rgba(253, 248, 240, 0.12), rgba(0, 0, 0, 0) 50%),
+      linear-gradient(135deg, rgb(42, 26, 64), rgb(17, 7, 32));
+  }
+
+  /* O sexto não tem camada de base no export — o fundo do card aparece. */
+  .img-placeholder-6 {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0) 40%, rgba(212, 160, 23, 0.4) 100%),
+      radial-gradient(70% 40% at 50% 30%, rgba(253, 248, 240, 0.18), rgba(0, 0, 0, 0) 70%);
+  }
+
+  /**
+   * Corpo do post. Escrito à mão em vez de @tailwindcss/typography: o plugin
+   * traria uma escala inteira para sobrescrever quase toda, e cada override
+   * de `prose-*` custa mais bytes que a regra direta.
+   */
+  .prose-clama {
+    color: rgb(253 248 240 / 0.82);
+    font-size: 17.5px;
+    line-height: 1.75;
+  }
+
+  .prose-clama > p + p {
+    margin-top: 1.4em;
+  }
+
+  .prose-clama .lede {
+    color: rgb(253 248 240 / 0.92);
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  .prose-clama h2 {
+    color: #fdf8f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-top: 2.2em;
+    margin-bottom: 0.6em;
+  }
+
+  .prose-clama h3 {
+    color: #fdf8f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 23px;
+    line-height: 1.25;
+    margin-top: 1.8em;
+    margin-bottom: 0.5em;
+  }
+
+  .prose-clama ul,
+  .prose-clama ol {
+    margin: 1.4em 0;
+    padding-left: 1.4em;
+  }
+
+  .prose-clama ul {
+    list-style: disc;
+  }
+
+  .prose-clama ol {
+    list-style: decimal;
+  }
+
+  .prose-clama li + li {
+    margin-top: 0.5em;
+  }
+
+  .prose-clama li::marker {
+    color: rgb(240 192 64 / 0.6);
+  }
+
+  .prose-clama a {
+    color: #f0c040;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose-clama a:hover {
+    color: #fdf8f0;
+  }
+
+  .prose-clama strong {
+    color: #fdf8f0;
+    font-weight: 600;
+  }
+
+  .prose-clama img {
+    border-radius: 12px;
+    margin: 2em 0;
+  }
+}
+
+/* Respeita quem pediu menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

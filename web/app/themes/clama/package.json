@@ -1,0 +1,12 @@
+{
+  "name": "clama-theme",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tailwindcss -i assets/css/app.css -o assets/css/app.build.css --minify",
+    "dev": "tailwindcss -i assets/css/app.css -o assets/css/app.build.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
