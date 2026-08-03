@@ -156,6 +156,17 @@ Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 // Disable script concatenation
 Config::define('CONCATENATE_SCRIPTS', false);
 
+// O Rank Math recusa carregar o frontend enquanto a "registration" for
+// inválida — e ela é inválida até o site ser conectado a uma conta
+// rankmath.com. Sem esta constante o plugin fica ativo e **não emite nada**:
+// nem meta description, nem Open Graph, nem JSON-LD. Falha silenciosa, que só
+// aparece inspecionando o HTML servido.
+//
+// `RANK_MATH_REGISTRATION_SKIP` é a saída prevista pelo próprio plugin
+// (`Conditional::is_invalid_registration`). Não queremos conta em serviço de
+// terceiro para um blog que usa só os módulos locais.
+Config::define('RANK_MATH_REGISTRATION_SKIP', true);
+
 // Indexação é decisão de ambiente, nunca dado de banco (Story 2.4). Definir
 // aqui garante valor em TODO ambiente — sem isso a constante fica indefinida
 // em produção e `blog_public` do banco volta a mandar, que é como um clone de

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54c21a56082f47bc14d28eda6a026405",
+    "content-hash": "6059cb9728c46c040e34b27a0573ae20",
     "packages": [
         {
             "name": "composer/installers",
@@ -1040,6 +1040,37 @@
                 }
             ],
             "time": "2026-07-06T19:11:50+00:00"
+        },
+        {
+            "name": "wp-plugin/seo-by-rank-math",
+            "version": "1.0.275",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
+                "reference": "tags/1.0.275"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.275.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Rank Math SEO"
+                }
+            ],
+            "description": "Grow your organic traffic and AI visibility with powerful SEO tools, XML sitemaps, Schema automation, and built-in AI SEO, all in one place.",
+            "homepage": "https://rankmath.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/seo-by-rank-math/#developers",
+                "issues": "https://wordpress.org/support/plugin/seo-by-rank-math",
+                "source": "https://plugins.svn.wordpress.org/seo-by-rank-math"
+            },
+            "time": "2026-07-28T10:05:54+00:00"
         },
         {
             "name": "wp-theme/twentytwentyfive",
