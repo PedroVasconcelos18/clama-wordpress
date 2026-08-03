@@ -156,6 +156,136 @@
     border-radius: 12px;
     margin: 2em 0;
   }
+
+  /**
+   * Versículo destacado (Story 2.6). Portado de
+   * `clama-frontend/src/styles/index.css:89-133` — que é o CSS que de fato
+   * renderiza hoje. A variante em `tailwind.config.ts:101+` é mais antiga,
+   * diferente, e não vale.
+   *
+   * ⚠️ Precisa cobrir DUAS formas, e é por isso que os seletores parecem
+   * redundantes:
+   *
+   *   legada (posts migrados no Epic 4, vindos do Tiptap):
+   *     <blockquote class="versiculo">TEXTO</blockquote>
+   *     — texto como nó direto, sem <p>; sem referência, porque o bleach do
+   *       Django removia `data-referencia` e `data-versao` antes de gravar
+   *
+   *   nova (bloco do WordPress):
+   *     <blockquote class="versiculo" data-referencia="…" data-versao="…">
+   *       <p>TEXTO</p><cite>João 3:16 (ARC)</cite>
+   *     </blockquote>
+   *
+   * Estilizar só `> p`, como o CSS original faz, deixaria todo versículo
+   * migrado sem a tipografia — só com a moldura.
+   */
+  .prose-clama blockquote.versiculo {
+    background-color: transparent;
+    background-image: linear-gradient(
+      90deg,
+      rgba(240, 192, 64, 0.1),
+      rgba(240, 192, 64, 0.03) 60%,
+      rgba(0, 0, 0, 0)
+    );
+    border: 0;
+    border-left: 2px solid #f0c040;
+    border-radius: 0 8px 8px 0;
+    /* A tipografia vai aqui também, para alcançar o texto solto da forma legada. */
+    color: #fdf8f0;
+    font-family: Georgia, serif;
+    font-size: 1.45rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 2.5rem 0;
+    padding: 2rem 1.5rem 2rem 2.5rem;
+    position: relative;
+  }
+
+  .prose-clama blockquote.versiculo::before {
+    color: rgba(240, 192, 64, 0.55);
+    content: '\201C';
+    font-family: Georgia, serif;
+    font-size: 2.6rem;
+    left: 0.5rem;
+    line-height: 1;
+    position: absolute;
+    top: 0.1em;
+  }
+
+  .prose-clama blockquote.versiculo > p {
+    color: #fdf8f0;
+    font-family: Georgia, serif;
+    font-size: 1.45rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .prose-clama blockquote.versiculo > cite {
+    color: #d4a017;
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    margin-top: 0.85rem;
+    text-transform: uppercase;
+  }
+}
+
+/**
+ * O editor de blocos não aplica `.prose-clama`, então o mesmo visual precisa
+ * ser declarado sem esse ancestral — é o que faz a pré-visualização
+ * corresponder ao frontend (AC4) em vez de apenas se parecer com ele.
+ */
+.editor-styles-wrapper blockquote.versiculo {
+  background-image: linear-gradient(
+    90deg,
+    rgba(240, 192, 64, 0.1),
+    rgba(240, 192, 64, 0.03) 60%,
+    rgba(0, 0, 0, 0)
+  );
+  border: 0;
+  border-left: 2px solid #f0c040;
+  border-radius: 0 8px 8px 0;
+  margin: 2.5rem 0;
+  padding: 2rem 1.5rem 2rem 2.5rem;
+  position: relative;
+}
+
+.editor-styles-wrapper blockquote.versiculo::before {
+  color: rgba(240, 192, 64, 0.55);
+  content: '\201C';
+  font-family: Georgia, serif;
+  font-size: 2.6rem;
+  left: 0.5rem;
+  line-height: 1;
+  position: absolute;
+  top: 0.1em;
+}
+
+.editor-styles-wrapper blockquote.versiculo > p {
+  color: #fdf8f0;
+  font-family: Georgia, serif;
+  font-size: 1.45rem;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.editor-styles-wrapper blockquote.versiculo > cite {
+  color: #d4a017;
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  margin-top: 0.85rem;
+  text-transform: uppercase;
 }
 
 /* Respeita quem pediu menos movimento. */

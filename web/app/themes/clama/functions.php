@@ -45,6 +45,17 @@ add_action('wp_enqueue_scripts', function () {
 }, 5);
 
 /**
+ * O editor recebe a mesma folha do frontend.
+ *
+ * É o que faz a pré-visualização do bloco corresponder ao render publicado
+ * (AC4 da Story 2.6). Duas folhas separadas divergem no primeiro ajuste que
+ * alguém esquece de replicar.
+ */
+add_action('after_setup_theme', function () {
+    add_editor_style('assets/css/app.build.css');
+});
+
+/**
  * O tema não carrega web font nenhuma (WP-UXDR1), e não carrega o CSS de
  * blocos do core: `prose-clama` já estiliza parágrafo, lista, citação e
  * imagem. Sem isso o core injeta ~9 KB inline em toda página para reestilizar
@@ -62,6 +73,17 @@ add_action('wp_enqueue_scripts', function () {
 
 /** Cada bloco usado carrega só o seu CSS, em vez da folha inteira do core. */
 add_filter('should_load_separate_core_block_assets', '__return_true');
+
+/**
+ * Blocos próprios. O estilo deles vive no `app.build.css` do tema, não numa
+ * folha por bloco — são poucas regras e uma requisição a mais custa mais que
+ * elas.
+ */
+add_action('init', function () {
+    foreach (glob(CLAMA_THEME_DIR . '/assets/blocks/*/block.json') as $manifesto) {
+        register_block_type(dirname($manifesto));
+    }
+});
 
 /** Emojis do core custam um script e uma requisição de sprite. Não usamos. */
 add_action('init', function () {

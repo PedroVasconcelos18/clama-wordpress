@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "clama/versiculo-destacado",
+  "title": "Versículo destacado",
+  "category": "text",
+  "icon": "book-alt",
+  "description": "Versículo em destaque, com referência e versão da tradução.",
+  "keywords": [
+    "versículo",
+    "biblia",
+    "citação"
+  ],
+  "textdomain": "clama",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "color": false,
+    "spacing": {
+      "margin": true
+    },
+    "typography": false
+  },
+  "attributes": {
+    "texto": {
+      "type": "string",
+      "source": "html",
+      "selector": "blockquote > p",
+      "default": ""
+    },
+    "referencia": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "blockquote",
+      "attribute": "data-referencia",
+      "default": ""
+    },
+    "versao": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "blockquote",
+      "attribute": "data-versao",
+      "default": "ARC"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css"
+}

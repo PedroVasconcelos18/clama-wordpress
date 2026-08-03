@@ -9,7 +9,9 @@
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./**/*.php', './assets/js/**/*.js'],
+  // Enumerado em vez de `./**/*.php`: o glob recursivo varre node_modules e
+  // o próprio Tailwind avisa que isso degrada o build.
+  content: ['./*.php', './parts/*.php', './inc/*.php', './src/**/*.js'],
 
   /**
    * `clama_placeholder_de_capa()` monta o nome por concatenação
