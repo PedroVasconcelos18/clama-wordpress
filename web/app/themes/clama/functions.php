@@ -12,6 +12,7 @@ define('CLAMA_THEME_DIR', get_template_directory());
 
 require_once CLAMA_THEME_DIR . '/inc/apresentacao.php';
 require_once CLAMA_THEME_DIR . '/inc/historia-ilustrativa.php';
+require_once CLAMA_THEME_DIR . '/inc/csp.php';
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
