@@ -156,6 +156,13 @@ Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 // Disable script concatenation
 Config::define('CONCATENATE_SCRIPTS', false);
 
+// Indexação é decisão de ambiente, nunca dado de banco (Story 2.4). Definir
+// aqui garante valor em TODO ambiente — sem isso a constante fica indefinida
+// em produção e `blog_public` do banco volta a mandar, que é como um clone de
+// staging desindexaria clama.me inteiro sob a ADR-03.
+// Os arquivos de environments/ sobrescrevem para `true`.
+Config::define('DISALLOW_INDEXING', false);
+
 /**
  * Debugging Settings
  */
