@@ -31,7 +31,14 @@ if (! defined('ABSPATH')) {
 
 <header class="sticky top-0 z-30 border-b border-clama-gold/15 bg-clama-night/80 backdrop-blur">
     <?php if (is_singular('post')) : ?>
-        <div class="absolute left-0 right-0 top-0 h-[3px] bg-clama-night-deep">
+        <?php // O trilho tem altura fixa e já está no DOM com a barra em 0 —
+              // por isso a barra nunca desloca layout ao aparecer.?>
+        <div class="absolute left-0 right-0 top-0 h-[3px] bg-clama-night-deep"
+             role="progressbar"
+             aria-label="Progresso de leitura"
+             aria-valuenow="0"
+             aria-valuemin="0"
+             aria-valuemax="100">
             <div id="clama-progresso" class="h-full w-0 bg-gradient-to-r from-clama-gold-soft via-clama-gold to-clama-gold-soft"></div>
         </div>
     <?php endif; ?>

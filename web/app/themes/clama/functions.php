@@ -11,6 +11,7 @@ if (! defined('ABSPATH')) {
 define('CLAMA_THEME_DIR', get_template_directory());
 
 require_once CLAMA_THEME_DIR . '/inc/apresentacao.php';
+require_once CLAMA_THEME_DIR . '/inc/historia-ilustrativa.php';
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -83,6 +84,28 @@ add_action('init', function () {
     foreach (glob(CLAMA_THEME_DIR . '/assets/blocks/*/block.json') as $manifesto) {
         register_block_type(dirname($manifesto));
     }
+});
+
+/**
+ * Barra de progresso — só no post, e só ela.
+ *
+ * `defer` e sem dependência: o script não precisa de jQuery nem de nada do
+ * core, e adiar não muda nada visualmente porque a barra já nasce em 0.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (! is_singular('post')) {
+        return;
+    }
+
+    $arquivo = CLAMA_THEME_DIR . '/assets/js/progresso-leitura.js';
+
+    wp_enqueue_script(
+        'clama-progresso-leitura',
+        get_template_directory_uri() . '/assets/js/progresso-leitura.js',
+        [],
+        file_exists($arquivo) ? filemtime($arquivo) : null,
+        ['strategy' => 'defer', 'in_footer' => true],
+    );
 });
 
 /** Emojis do core custam um script e uma requisição de sprite. Não usamos. */

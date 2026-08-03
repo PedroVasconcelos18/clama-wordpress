@@ -54,6 +54,19 @@ while (have_posts()) :
                     <span aria-hidden="true">◷</span>
                     <?php echo esc_html(clama_tempo_de_leitura($post_id)); ?> min de leitura
                 </div>
+
+                <?php if (clama_e_historia_ilustrativa($post_id)) : ?>
+                    <?php
+                    // CDC art. 37. Fica no cabeçalho, na linha de autoria — quem
+                    // lê precisa saber antes de começar, não depois de terminar.
+                    // `role="note"` faz o leitor de tela anunciar como aviso em
+                    // vez de texto solto.
+                    ?>
+                    <span role="note"
+                          class="rounded-full border border-clama-gold/30 bg-clama-gold/10 px-3 py-1 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-clama-gold">
+                        <?php echo esc_html(CLAMA_AVISO_HISTORIA); ?>
+                    </span>
+                <?php endif; ?>
             </div>
         </div>
     </header>
@@ -82,6 +95,18 @@ while (have_posts()) :
         // pode depender de saber quem está lendo.
     ?>
         <div id="clama-widget-engajamento" data-post-slug="<?php echo esc_attr(get_post_field('post_name', $post_id)); ?>" class="mt-12"></div>
+
+        <?php // Primeira posição: logo depois do corpo e do widget de engajamento.?>
+        <div class="mt-14">
+            <?php get_template_part('parts/cta-clamar', null, ['variante' => 'bottom']); ?>
+        </div>
+
+        <?php // Segunda posição: fim absoluto, depois de onde os comentários
+              // entram (Story 3.8). Copy diferente de propósito — quem chegou
+              // até aqui já leu o argumento longo.?>
+        <div class="mb-24 mt-14">
+            <?php get_template_part('parts/cta-clamar', null, ['variante' => 'after-comments']); ?>
+        </div>
     </main>
 
 <?php endwhile; ?>

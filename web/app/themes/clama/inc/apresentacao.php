@@ -60,9 +60,24 @@ function clama_tempo_de_leitura(int $post_id): int
     return max(1, (int) ceil($palavras / 200));
 }
 
-/** Primeira categoria, para o eyebrow do card. */
+/**
+ * Rótulo do eyebrow (Story 2.7, AC4).
+ *
+ * Post marcado como história ilustrativa vira "História" — e essa marcação
+ * **vence** a categoria do WordPress. Não é preferência de rótulo: o eyebrow é
+ * o primeiro sinal de que a história não é literal, e ele precisa aparecer
+ * também no card da listagem, onde o badge do cabeçalho não chega.
+ *
+ * Fora disso, usa a categoria do WordPress; sem categoria, "Reflexão" — que é
+ * o comportamento do `presentation.ts:10-12` do frontend React, onde o rótulo
+ * era derivado só do booleano porque o backend não tem campo de categoria.
+ */
 function clama_categoria_principal(int $post_id): string
 {
+    if (clama_e_historia_ilustrativa($post_id)) {
+        return 'História';
+    }
+
     $categorias = get_the_category($post_id);
 
     return $categorias ? $categorias[0]->name : 'Reflexão';

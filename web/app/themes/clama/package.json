@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run build:blocks && npm run build:css",
+    "build": "npm run build:blocks && npm run build:painel && npm run build:css",
     "build:css": "tailwindcss -i assets/css/app.css -o assets/css/app.build.css --minify",
     "build:blocks": "wp-scripts build --webpack-src-dir=src --output-path=assets/blocks",
-    "dev:css": "tailwindcss -i assets/css/app.css -o assets/css/app.build.css --watch"
+    "dev:css": "tailwindcss -i assets/css/app.css -o assets/css/app.build.css --watch",
+    "build:painel": "wp-scripts build --webpack-src-dir=src --output-path=assets/editor painel-historia/index=./painel-historia/index.js"
   },
   "devDependencies": {
     "@wordpress/scripts": "^34.0.0",
