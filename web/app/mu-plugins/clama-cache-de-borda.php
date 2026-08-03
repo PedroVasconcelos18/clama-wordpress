@@ -74,7 +74,7 @@ add_action('send_headers', function () {
     header('CDN-Cache-Control: public, max-age=' . CLAMA_TTL_BORDA);
     header(
         'Vercel-CDN-Cache-Control: public, max-age=' . CLAMA_TTL_BORDA
-        . ', stale-while-revalidate=86400'
+        . ', stale-while-revalidate=86400',
     );
 
     if (is_singular('post')) {
@@ -161,7 +161,7 @@ function clama_purgar_na_borda(WP_Post $post): void
             'clama_purga_sem_credencial ' . wp_json_encode([
                 'post_id' => $post->ID,
                 'detalhe' => 'VERCEL_PURGE_TOKEN/VERCEL_PROJECT_ID ausentes',
-            ])
+            ]),
         );
 
         return;
@@ -179,7 +179,7 @@ function clama_purgar_na_borda(WP_Post $post): void
                 'projectId' => $projeto,
                 'tags' => [clama_tag_de_cache($post->ID)],
             ]),
-        ]
+        ],
     );
 
     $codigo = is_wp_error($resposta) ? 0 : wp_remote_retrieve_response_code($resposta);
@@ -193,7 +193,7 @@ function clama_purgar_na_borda(WP_Post $post): void
             'tag' => clama_tag_de_cache($post->ID),
             'status' => $codigo,
             'erro' => is_wp_error($resposta) ? $resposta->get_error_message() : '',
-        ])
+        ]),
     );
 
     if (! $ok) {
