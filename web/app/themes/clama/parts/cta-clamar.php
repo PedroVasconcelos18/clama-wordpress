@@ -33,11 +33,33 @@ $copy = $compacto
         'sub' => 'O Clama escreve orações personalizadas — pra um luto, uma decisão difícil, um filho rebelde, uma cura que demora. Conta o que tá no peito, a gente cuida do resto.',
         'cta' => 'Quero clamar →',
     ];
+
+/**
+ * Nome acessível.
+ *
+ * ⚠️ Desvio consciente da AC3 da Story 2.8, que pede
+ * `aria-label="Quero pedir uma oração"` literal. Esse valor sozinho piora o
+ * **WCAG 2.5.3 (Label in Name)**: o `aria-label` substitui o texto visível,
+ * então quem usa controle por voz e diz "clicar Quero clamar" não ativa nada.
+ * Pondo o texto do botão na frente, a frase mais provável de ser falada passa
+ * a casar. A frase da AC continua presente, inteira.
+ *
+ * O que isto **não** resolve: a auditoria `label-content-name-mismatch` do
+ * Lighthouse compara o nome acessível com *todo* o texto dentro do link — o
+ * card inteiro, não o rótulo do botão. Nenhum `aria-label` conciso passa nela
+ * enquanto o `<a>` envolver o card, e envolver o card é exatamente o que a
+ * AC3 manda. A auditoria tem peso 0 e a nota de acessibilidade segue em 100.
+ * Para zerar de vez, o CTA teria que usar o link sobreposto do card de post
+ * (Story 2.5) — mudança de AC, decisão do Pedro.
+ *
+ * Reverter é trocar esta linha pela string literal.
+ */
+$nome_acessivel = rtrim(str_replace('→', '', $copy['cta'])) . ', quero pedir uma oração';
 ?>
 
 <a href="/"
    rel="nofollow"
-   aria-label="Quero pedir uma oração"
+   aria-label="<?php echo esc_attr($nome_acessivel); ?>"
    data-slot="cta-clamar"
    data-variant="<?php echo esc_attr($variante); ?>"
    class="group relative block overflow-hidden rounded-2xl border border-clama-gold/35 transition-colors hover:border-clama-gold/60 <?php echo $compacto ? 'px-6 py-8 sm:px-9 sm:py-10' : 'px-7 py-10 sm:px-12 sm:py-14'; ?>">

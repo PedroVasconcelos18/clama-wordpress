@@ -108,6 +108,38 @@ add_action('wp_enqueue_scripts', function () {
     );
 });
 
+/**
+ * Meta description — fallback até o plugin de SEO chegar (Story 5.1).
+ *
+ * Sem ela o Lighthouse reprova a auditoria "Document does not have a meta
+ * description" e a nota de SEO trava em 91, abaixo do 100 que o `WP-NFR3`
+ * exige. Com ela, 100.
+ *
+ * Sai do caminho sozinha quando o Rank Math ou o Yoast estiverem ativos —
+ * duas descrições no `<head>` é pior que nenhuma, porque o buscador escolhe
+ * uma e não avisa qual.
+ */
+add_action('wp_head', function () {
+    if (defined('RANK_MATH_VERSION') || defined('WPSEO_VERSION')) {
+        return;
+    }
+
+    $descricao = is_singular()
+        ? get_the_excerpt()
+        : get_bloginfo('description');
+
+    $descricao = trim(wp_strip_all_tags((string) $descricao));
+
+    if ($descricao === '') {
+        return;
+    }
+
+    printf(
+        '<meta name="description" content="%s">' . "\n",
+        esc_attr(wp_html_excerpt($descricao, 160, '…')),
+    );
+}, 1);
+
 /** Emojis do core custam um script e uma requisição de sprite. Não usamos. */
 add_action('init', function () {
     remove_action('wp_head', 'print_emoji_detection_script', 7);

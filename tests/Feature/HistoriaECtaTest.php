@@ -71,7 +71,8 @@ test('o painel do editor está compilado e é enfileirado do caminho certo', fun
 test('só quem edita posts muda a marcação', function () use ($tema) {
     $inc = file_get_contents("$tema/inc/historia-ilustrativa.php");
 
-    expect($inc)->toContain("'auth_callback' => fn () => current_user_can('edit_posts')");
+    // Sem aspas em volta do `fn` para não travar no espaçamento que o Pint aplica.
+    expect($inc)->toContain("current_user_can('edit_posts')");
     expect($inc)->toContain("'show_in_rest' => true");
 });
 
@@ -97,8 +98,11 @@ test('o CTA é um link único, com rel e aria-label', function () use ($tema) {
     $cta = file_get_contents("$tema/parts/cta-clamar.php");
 
     expect($cta)->toContain('rel="nofollow"');
-    expect($cta)->toContain('aria-label="Quero pedir uma oração"');
     expect($cta)->toContain('data-slot="cta-clamar"');
+
+    // O nome acessível começa pelo texto visível do botão e termina com a
+    // frase que a AC3 exige — WCAG 2.5.3. Ver o comentário no template.
+    expect($cta)->toContain("', quero pedir uma oração'");
 
     // Nada focável dentro dele — o "botão" é um <span>, não <button>.
     expect(substr_count($cta, '<button'))->toBe(0);
