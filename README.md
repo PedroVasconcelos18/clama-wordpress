@@ -116,6 +116,7 @@ composer test                # pest
 - **Nada de `composer update` no host.**
 - **O WordPress nunca recebe credencial do Clama.** O cookie de autenticação do Django tem escopo `Path=/api`; o navegador não o envia para `/blog/*`. Ver ADR-01.
 - **`WP_HOME` em produção é `https://clama.me/blog`**, não o hostname da origem — senão o WordPress emite URLs absolutas da origem e vaza o hostname.
+- **Todo plugin passa pela política.** Entrada em `config/plugins-aprovados.json` com as três justificativas (necessidade, o que injeta no frontend, histórico de CVE), ou `composer test` falha. Um plugin de segurança, só. Ver [política completa](../clama-docs/politica-de-plugins-wordpress.md).
 
 ---
 

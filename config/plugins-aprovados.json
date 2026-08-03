@@ -1,0 +1,17 @@
+{
+    "_leia_antes_de_editar": "Toda entrada aqui é uma decisão de segurança, não de conveniência. A política está em clama-docs/politica-de-plugins-wordpress.md. Adicionar linha aqui sem as três justificativas preenchidas faz o teste de fronteira falhar — de propósito.",
+    "plugins": {
+        "roots/bedrock-disallow-indexing": {
+            "necessidade": "Impede que ambientes que não são produção sejam indexados. É a fundação da Story 2.4 (staging isolado que não pode desindexar produção) e vem como dependência do próprio Bedrock.",
+            "injeta_no_frontend": "nada — atua só no cabeçalho de robots, sem CSS nem JavaScript",
+            "historico_cve": "nenhuma CVE registrada. Mantido pela Roots, mesmo grupo do Bedrock; superfície de algumas dezenas de linhas.",
+            "categoria": "infraestrutura"
+        }
+    },
+    "plugins_de_seguranca": {
+        "_regra": "No máximo UM. Wordfence + Solid Security + Patchstack juntos não somam proteção — somam superfície, conflito e peso. O escolhido é o Patchstack, por virtual patching (12.000+ regras por CVE) contra a janela de 6h do risco R2.",
+        "escolhido": "patchstack/patchstack",
+        "instalado": false,
+        "motivo_nao_instalado": "Depende da conta Kinsta provisionada (Story 2.2, Task 1). O plugin é o agente; sem site real ele não tem o que proteger."
+    }
+}
