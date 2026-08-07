@@ -20,6 +20,7 @@
     "roots/wp-config": "^1.0",
     "vlucas/phpdotenv": "^5.0",
     "wp-plugin/seo-by-rank-math": "^1.0",
+    "wp-plugin/sqlite-database-integration": "^2.2",
     "wp-theme/twentytwentyfive": "^1.0"
   },
   "require-dev": {

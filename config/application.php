@@ -54,7 +54,11 @@ if (file_exists($root_dir . '/.env')) {
     $dotenv->load();
 
     $dotenv->required(['WP_HOME', 'WP_SITEURL']);
-    if (!env('DATABASE_URL')) {
+
+    // Em SQLite nao existe credencial de banco para exigir — o "banco" e um
+    // arquivo no volume. Exigir DB_USER aqui faria o boot falhar com uma
+    // mensagem que nao descreve o problema.
+    if (env('DB_ENGINE') !== 'sqlite' && !env('DATABASE_URL')) {
         $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
     }
 }
@@ -105,25 +109,50 @@ Config::define('WP_CONTENT_URL', Config::get('WP_HOME') . Config::get('CONTENT_D
 /**
  * DB settings
  */
-if (env('DB_SSL')) {
-    Config::define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
-}
-
-Config::define('DB_NAME', env('DB_NAME'));
-Config::define('DB_USER', env('DB_USER'));
-Config::define('DB_PASSWORD', env('DB_PASSWORD'));
-Config::define('DB_HOST', env('DB_HOST') ?: 'localhost');
-Config::define('DB_CHARSET', 'utf8mb4');
-Config::define('DB_COLLATE', '');
 $table_prefix = env('DB_PREFIX') ?: 'wp_';
 
-if (env('DATABASE_URL')) {
-    $dsn = (object) parse_url(env('DATABASE_URL'));
+if (env('DB_ENGINE') === 'sqlite') {
+    /**
+     * SQLite. O "banco" e um arquivo, entregue pelo drop-in `web/app/db.php`
+     * (plugin `sqlite-database-integration`).
+     *
+     * 🔴 `DB_DIR` PRECISA apontar para dentro do volume persistente. O padrao
+     * do plugin e `WP_CONTENT_DIR . '/database/'`, que no container vive na
+     * imagem — cada deploy comecaria com um site em branco, sem erro nenhum.
+     * Em local o padrao serve, porque nao ha container.
+     */
+    Config::define('DB_ENGINE', 'sqlite');
+    Config::define('DB_DIR', env('DB_DIR') ?: $webroot_dir . '/app/database/');
+    Config::define('DB_FILE', env('DB_FILE') ?: '.ht.sqlite');
 
-    Config::define('DB_NAME', substr($dsn->path, 1));
-    Config::define('DB_USER', $dsn->user);
-    Config::define('DB_PASSWORD', isset($dsn->pass) ? $dsn->pass : null);
-    Config::define('DB_HOST', isset($dsn->port) ? "{$dsn->host}:{$dsn->port}" : $dsn->host);
+    // O core e varios plugins leem estas constantes sem checar o engine.
+    // Indefinidas, geram notice; com credencial de verdade, confundem.
+    Config::define('DB_NAME', 'clama_sqlite');
+    Config::define('DB_USER', '');
+    Config::define('DB_PASSWORD', '');
+    Config::define('DB_HOST', '');
+    Config::define('DB_CHARSET', 'utf8mb4');
+    Config::define('DB_COLLATE', '');
+} else {
+    if (env('DB_SSL')) {
+        Config::define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
+    }
+
+    Config::define('DB_NAME', env('DB_NAME'));
+    Config::define('DB_USER', env('DB_USER'));
+    Config::define('DB_PASSWORD', env('DB_PASSWORD'));
+    Config::define('DB_HOST', env('DB_HOST') ?: 'localhost');
+    Config::define('DB_CHARSET', 'utf8mb4');
+    Config::define('DB_COLLATE', '');
+
+    if (env('DATABASE_URL')) {
+        $dsn = (object) parse_url(env('DATABASE_URL'));
+
+        Config::define('DB_NAME', substr($dsn->path, 1));
+        Config::define('DB_USER', $dsn->user);
+        Config::define('DB_PASSWORD', isset($dsn->pass) ? $dsn->pass : null);
+        Config::define('DB_HOST', isset($dsn->port) ? "{$dsn->host}:{$dsn->port}" : $dsn->host);
+    }
 }
 
 /**

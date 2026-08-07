@@ -1,0 +1,29 @@
+# 559 MB de dependências de build. Os assets do tema já vão versionados em
+# `web/app/themes/clama/assets/`, então a imagem não precisa de Node nenhum.
+**/node_modules
+
+# 🔴 O .env tem as salts. Ele NUNCA entra na imagem — no Railway as variáveis
+# vêm do painel, e uma cópia dentro do container seria a mesma credencial em
+# dois lugares, com um deles versionado por engano mais cedo ou mais tarde.
+.env
+.env.*
+
+# Estado local: banco SQLite e uploads da máquina de desenvolvimento. No
+# Railway isso vive no volume, e subir junto sobrescreveria produção.
+web/app/database
+web/app/uploads
+
+# O Composer reinstala a partir do lock, com --no-dev.
+vendor
+
+# O core do WordPress também vem do Composer (`roots/wordpress`, instalado em
+# web/wp pelo wordpress-install-dir). Copiar a cópia local por cima
+# sobrescreveria a versão do lock pela que estiver na máquina de quem buildou.
+web/wp
+
+.git
+.gitignore
+tests
+.github
+docker-compose*.yml
+*.md

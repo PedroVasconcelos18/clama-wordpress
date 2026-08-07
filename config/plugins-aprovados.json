@@ -12,6 +12,12 @@
             "injeta_no_frontend": "nada. Medido comparando a página do post antes e depois de ativar: 7 scripts e 1 stylesheet nos dois casos, zero assets novos. O HTML até encolheu 189 bytes, porque o fallback de meta description do tema sai do caminho quando o plugin está ativo. No código: zero hooks `wp_enqueue_scripts`, 21 `admin_enqueue_scripts`.",
             "historico_cve": "plugin de SEO mais instalado depois do Yoast, com mais de 3 milhões de instalações ativas e equipe dedicada de segurança. Já teve CVEs — como todo plugin desse porte — e as corrigiu com release rápida. Está sob virtual patching do Patchstack, que é justamente o desenho da Story 2.3 para essa classe de risco.",
             "categoria": "seo"
+        },
+        "wp-plugin/sqlite-database-integration": {
+            "necessidade": "Substitui o serviço de MariaDB por um arquivo no volume, eliminando o segundo serviço no Railway. Decisão de custo, tomada com o trade-off explícito: o plugin é feature plugin do time de Performance do WordPress, marcado 'Under Development', e o próprio time diz que não entra no core no curto prazo. Validado aqui contra o Rank Math — meta, Open Graph, Twitter Card, JSON-LD, canonical e sitemap_index com os filhos, todos corretos sobre SQLite.",
+            "injeta_no_frontend": "nada. Atua como drop-in `web/app/db.php`, abaixo do WordPress: substitui a camada de banco e não registra hook de frontend. Zero `wp_enqueue_scripts`.",
+            "historico_cve": "nenhuma CVE registrada. Mantido pela equipe de Performance do WordPress.org e usado como base do WordPress Playground. O risco aqui não é CVE — é maturidade: cerca de 3 mil instalações ativas, contra milhões dos outros plugins desta lista. O modo de falha esperado é incompatibilidade de SQL de plugin, não exploração remota.",
+            "categoria": "infraestrutura"
         }
     },
     "plugins_de_seguranca": {

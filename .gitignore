@@ -35,3 +35,8 @@ wp-cli.local.yml
 
 # Tema: dependências de build não vão para o repositório
 web/app/themes/*/node_modules/
+
+# Banco SQLite local. O arquivo E o banco inteiro — versionar seria commitar
+# conteudo, usuarios e senhas de desenvolvimento a cada post criado.
+# Em producao ele vive no volume do Railway, em /data/database/.
+web/app/database/
