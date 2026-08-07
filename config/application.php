@@ -100,6 +100,17 @@ Config::define('WP_HOME', env('WP_HOME'));
 Config::define('WP_SITEURL', env('WP_SITEURL'));
 
 /**
+ * URL do app Clama (a SPA na raiz do dominio).
+ *
+ * O tema linka /conta, /sobre, /privacidade e o fluxo de pedido atraves de
+ * `clama_url_do_app()`. Vazio = caminho absoluto de raiz, que e o correto em
+ * producao (blog em /blog do mesmo dominio). Em desenvolvimento aponte para a
+ * SPA rodando, senao esses links caem em 404 do WordPress e nao ha como
+ * testa-los.
+ */
+Config::define('CLAMA_APP_URL', env('CLAMA_APP_URL') ?: '');
+
+/**
  * Custom Content Directory
  */
 Config::define('CONTENT_DIR', '/app');

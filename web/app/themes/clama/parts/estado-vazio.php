@@ -23,7 +23,7 @@ if (! defined('ABSPATH')) {
         A primeira oração está sendo escrita — ou peça a sua agora, e ela pode virar o próximo texto deste blog.
     </p>
 
-    <a href="/"
+    <a href="<?php echo esc_url(clama_url_do_app('/')); ?>"
        class="mt-7 inline-flex items-center gap-2 rounded-full bg-clama-gold px-6 py-3 text-sm font-semibold text-clama-night transition-colors hover:bg-clama-gold-soft">
         Pedir minha oração →
     </a>

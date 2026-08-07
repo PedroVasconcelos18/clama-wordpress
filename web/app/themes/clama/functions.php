@@ -10,6 +10,7 @@ if (! defined('ABSPATH')) {
 
 define('CLAMA_THEME_DIR', get_template_directory());
 
+require_once CLAMA_THEME_DIR . '/inc/url-do-app.php';
 require_once CLAMA_THEME_DIR . '/inc/apresentacao.php';
 require_once CLAMA_THEME_DIR . '/inc/historia-ilustrativa.php';
 require_once CLAMA_THEME_DIR . '/inc/csp.php';
@@ -181,7 +182,7 @@ add_action('wp_enqueue_scripts', function () {
         'apiBase' => '',
         'postSlug' => get_post_field('post_name', get_the_ID()),
         'wpPostId' => get_the_ID(),
-        'loginUrl' => '/login',
+        'loginUrl' => clama_url_do_app('/login'),
     ]);
 });
 

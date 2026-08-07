@@ -94,16 +94,22 @@ while (have_posts()) :
         // WordPress não recebe o cookie de sessão — ADR-01 — então nada aqui
         // pode depender de saber quem está lendo.
     ?>
-        <div id="clama-widget-engajamento" data-post-slug="<?php echo esc_attr(get_post_field('post_name', $post_id)); ?>" class="mt-12"></div>
-
-        <?php // Primeira posição: logo depois do corpo e do widget de engajamento.?>
+        <?php // Primeira posição: logo depois do corpo, ANTES do widget.
+              //
+              // ⚠️ Este CTA já esteve depois do widget, e o resultado era os dois
+              // CTAs colados com 55px entre eles. O comentário original dizia
+              // "depois de onde os comentários entram" — mas os comentários não
+              // entram entre os dois: o widget da Story 3.8 os renderiza dentro
+              // da própria âncora, acima de tudo isto. A separação que o desenho
+              // pressupunha nunca existiu.?>
         <div class="mt-14">
             <?php get_template_part('parts/cta-clamar', null, ['variante' => 'bottom']); ?>
         </div>
 
-        <?php // Segunda posição: fim absoluto, depois de onde os comentários
-              // entram (Story 3.8). Copy diferente de propósito — quem chegou
-              // até aqui já leu o argumento longo.?>
+        <div id="clama-widget-engajamento" data-post-slug="<?php echo esc_attr(get_post_field('post_name', $post_id)); ?>" class="mt-14"></div>
+
+        <?php // Segunda posição: fim absoluto, depois dos comentários. Copy mais
+              // curta de propósito — quem chegou até aqui já leu o argumento longo.?>
         <div class="mb-24 mt-14">
             <?php get_template_part('parts/cta-clamar', null, ['variante' => 'after-comments']); ?>
         </div>

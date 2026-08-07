@@ -57,7 +57,7 @@ $copy = $compacto
 $nome_acessivel = rtrim(str_replace('→', '', $copy['cta'])) . ', quero pedir uma oração';
 ?>
 
-<a href="/"
+<a href="<?php echo esc_url(clama_url_do_app('/')); ?>"
    rel="nofollow"
    aria-label="<?php echo esc_attr($nome_acessivel); ?>"
    data-slot="cta-clamar"
@@ -68,7 +68,24 @@ $nome_acessivel = rtrim(str_replace('→', '', $copy['cta'])) . ', quero pedir u
     <span aria-hidden="true" class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-clama-gold/60 to-transparent"></span>
     <span aria-hidden="true" class="gold-halo pointer-events-none absolute inset-0"></span>
 
-    <span class="relative <?php echo $compacto ? 'flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between' : 'grid items-center gap-6 md:grid-cols-[1.4fr_auto]'; ?>">
+    <?php
+    /**
+     * ⚠️ A variante longa **empilha**, e isso é deliberado.
+     *
+     * Ela já foi `grid items-center gap-6 md:grid-cols-[1.4fr_auto]`, e o
+     * problema é que `md:` responde ao **viewport**, não ao container. Este CTA
+     * só é usado dentro da medida de leitura do `single.php` (`max-w-[680px]`),
+     * que sobra ~558px de conteúdo em qualquer tela de desktop. O `md:` prometia
+     * espaço que o container nunca teve: a coluna de texto ficava com ~375px, o
+     * título quebrava em quatro linhas com rag ruim, e o `items-center` deixava
+     * o botão boiando no meio de um cartão de 400px de altura.
+     *
+     * Container query resolveria de verdade, mas o Tailwind aqui é 3.4 e o
+     * plugin de `@container` não está instalado. Empilhar dá ao título os 558px
+     * inteiros — duas linhas em vez de quatro — sem dependência nova.
+     */
+    ?>
+    <span class="relative <?php echo $compacto ? 'flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between' : 'flex flex-col items-start gap-7'; ?>">
         <span class="block">
             <span class="eyebrow block"><?php echo esc_html($copy['eyebrow']); ?></span>
 

@@ -62,7 +62,7 @@ if (! defined('ABSPATH')) {
                     <span aria-hidden="true" class="mt-0.5 block h-px bg-clama-gold"></span>
                 <?php endif; ?>
             </a>
-            <a href="/conta" class="rounded-md px-3 py-2 text-clama-cream/65 transition-colors hover:text-clama-cream">
+            <a href="<?php echo esc_url(clama_url_do_app('/conta')); ?>" class="rounded-md px-3 py-2 text-clama-cream/65 transition-colors hover:text-clama-cream">
                 Conta
             </a>
         </nav>

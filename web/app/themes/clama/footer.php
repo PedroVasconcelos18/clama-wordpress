@@ -17,9 +17,9 @@ if (! defined('ABSPATH')) {
             <span class="text-xs italic text-clama-cream/55">uma vela acesa no escuro</span>
         </div>
         <div class="flex gap-5 text-xs text-clama-cream/55">
-            <a href="/sobre" class="hover:text-clama-gold">Sobre</a>
-            <a href="/privacidade" class="hover:text-clama-gold">Privacidade</a>
-            <a href="/contato" class="hover:text-clama-gold">Contato</a>
+            <a href="<?php echo esc_url(clama_url_do_app('/sobre')); ?>" class="hover:text-clama-gold">Sobre</a>
+            <a href="<?php echo esc_url(clama_url_do_app('/privacidade')); ?>" class="hover:text-clama-gold">Privacidade</a>
+            <a href="<?php echo esc_url(clama_url_do_app('/contato')); ?>" class="hover:text-clama-gold">Contato</a>
         </div>
     </div>
 </footer>
