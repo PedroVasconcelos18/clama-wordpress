@@ -11,8 +11,9 @@
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3,
-    "healthcheckPath": "/",
-    "healthcheckTimeout": 30,
+
+    "_semHealthcheck": "Não há healthcheckPath, e é consequência do desenho, não descuido. `WP_HOME` é o caminho público (clama.me/blog), então o WordPress responde 302 para lá em QUALQUER requisição que chegue pelo domínio da origem — inclusive a do RailwayHealthCheck, que trata 302 como falha e derruba o deploy. Isso é o canonical absoluto da Story 2.1 funcionando: a origem não se apresenta como destino. Para conferir saúde de verdade, use `railway logs` (o Apache registra o AH00163 ao subir) ou teste pelo domínio público depois do cutover.",
+
 
     "_numReplicas": "Mantém 1. Com SQLite o banco é um arquivo em disco local — duas réplicas gravando no mesmo volume corrompem o banco. É o limite real desta escolha, e escalar exige trocar para MariaDB antes.",
     "numReplicas": 1

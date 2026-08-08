@@ -56,6 +56,20 @@ ADD --chmod=755 https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# 🔴 Sem isto o WordPress não existe, e o erro não fala em WordPress.
+#
+# O Composer roda como root no build de container. Nessa condição ele
+# **desabilita plugins silenciosamente** ("Composer plugins have been disabled
+# for safety in this non-interactive session"), e o `roots/wordpress-core-installer`
+# — que é um plugin — é justamente quem move o core para `web/wp` conforme o
+# `extra.wordpress-install-dir`.
+#
+# Resultado sem a variável: o build passa, a imagem sobe, o Apache atende, e a
+# primeira requisição devolve `require(/app/web/wp/wp-blog-header.php): Failed to
+# open stream`. O core foi baixado — para `vendor/roots/wordpress`, onde ninguém
+# procura.
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 WORKDIR /app
 
 # Camada de dependências separada do código: mudar um arquivo do tema não
