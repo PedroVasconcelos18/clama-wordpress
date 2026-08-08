@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5d060"/>
+      <stop offset="100%" stop-color="#d4a017"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0c040" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f0c040" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="48" height="48" rx="10" fill="#1a0a2e"/>
+
+  <!-- Glow behind cross -->
+  <circle cx="24" cy="24" r="18" fill="url(#glow)"/>
+
+  <!-- Cross -->
+  <g fill="url(#gold)">
+    <!-- Vertical bar -->
+    <rect x="20" y="8" width="8" height="32" rx="2"/>
+    <!-- Horizontal bar -->
+    <rect x="10" y="16" width="28" height="8" rx="2"/>
+  </g>
+</svg>

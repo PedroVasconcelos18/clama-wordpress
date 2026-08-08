@@ -11,6 +11,7 @@ if (! defined('ABSPATH')) {
 define('CLAMA_THEME_DIR', get_template_directory());
 
 require_once CLAMA_THEME_DIR . '/inc/url-do-app.php';
+require_once CLAMA_THEME_DIR . '/inc/favicon.php';
 require_once CLAMA_THEME_DIR . '/inc/apresentacao.php';
 require_once CLAMA_THEME_DIR . '/inc/historia-ilustrativa.php';
 require_once CLAMA_THEME_DIR . '/inc/csp.php';
