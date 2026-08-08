@@ -144,7 +144,7 @@ function Curtir() {
 				onClick={ alternar }
 				disabled={ ocupado }
 				aria-pressed={ curtido }
-				className="group inline-flex items-center gap-2.5 rounded-full border border-clama-gold/30 py-2.5 pl-4 pr-5 text-sm transition-colors hover:border-clama-gold/60 disabled:opacity-60"
+				className="group inline-flex items-center gap-2.5 rounded-full border border-clama-gold/30 py-3 pl-5 pr-6 text-sm transition-colors hover:border-clama-gold/60 disabled:opacity-60"
 			>
 				<span aria-hidden="true" className={ curtido ? 'text-clama-gold' : '' }>
 					♥
@@ -267,7 +267,7 @@ function Comentarios() {
 						rows={ 4 }
 						maxLength={ 2000 }
 						placeholder="Escreva o que este texto mexeu em você…"
-						className="w-full rounded-xl border border-clama-gold/25 bg-clama-night-deep px-4 py-3 text-[15px] text-clama-cream placeholder:text-clama-cream/40 focus-visible:border-clama-gold/60 focus-visible:outline-none"
+						className="w-full rounded-xl border border-clama-gold/25 bg-clama-night-deep px-5 py-4 text-[15px] text-clama-cream placeholder:text-clama-cream/40 focus-visible:border-clama-gold/60 focus-visible:outline-none"
 					/>
 					<div className="mt-3 flex items-center justify-between gap-4">
 						{ erro ? (
@@ -280,7 +280,7 @@ function Comentarios() {
 						<button
 							type="submit"
 							disabled={ enviando || texto.trim().length === 0 }
-							className="rounded-full bg-clama-gold px-5 py-2.5 text-sm font-semibold text-clama-night transition-colors hover:bg-clama-gold-soft disabled:opacity-50"
+							className="rounded-full bg-clama-gold px-6 py-3 text-sm font-semibold text-clama-night transition-colors hover:bg-clama-gold-soft disabled:opacity-50"
 						>
 							{ enviando ? 'Publicando…' : 'Publicar' }
 						</button>
@@ -299,7 +299,7 @@ function Comentarios() {
 							<p className="mt-4 text-xs uppercase tracking-[0.16em] text-clama-gold-soft">
 								O que você escreveu
 							</p>
-							<p className="mt-2 whitespace-pre-line rounded-lg bg-clama-night-deep px-4 py-3 text-[15px] text-clama-cream/85">
+							<p className="mt-2 whitespace-pre-line rounded-lg bg-clama-night-deep px-5 py-4 text-[15px] text-clama-cream/85">
 								{ texto }
 							</p>
 						</>

@@ -44,9 +44,20 @@ if (! defined('ABSPATH')) {
     <?php endif; ?>
 
     <div class="mx-auto flex h-16 max-w-[1240px] items-center justify-between px-6 sm:px-8">
-        <a href="<?php echo esc_url(home_url('/')); ?>"
+        <?php
+        /**
+         * A marca leva ao Clama, não ao blog.
+         *
+         * Já apontou para `home_url('/')`, e o resultado era o wordmark e o
+         * item "Blog" da navegação — vizinhos na mesma barra — indo para o
+         * mesmo lugar. Além da redundância, quebrava a convenção que todo mundo
+         * traz de outros sites: a marca no canto volta para a **casa da marca**.
+         * Quem estava lendo um post e queria sair do blog não tinha por onde.
+         */
+        ?>
+        <a href="<?php echo esc_url(clama_url_do_app('/')); ?>"
            class="font-serif text-2xl tracking-wide text-clama-gold transition-colors hover:text-clama-cream"
-           aria-label="Clama — página inicial do blog">
+           aria-label="Clama — página inicial">
             Clama
         </a>
 
