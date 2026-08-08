@@ -19,8 +19,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu-dev libzip-dev unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" gd intl zip exif opcache \
-    && apt-get purge -y --auto-remove \
+    && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
+
+# 🔴 Um MPM, explicitamente.
+#
+# O `php:8.3-apache` vem com `mpm_prefork` — que é o exigido pelo mod_php. Mas a
+# instalação acima resolve dependências de forma diferente por arquitetura, e no
+# build amd64 do Railway o `mpm_event` entrou junto. Resultado: o Apache aborta
+# na subida com `AH00534: More than one MPM loaded`, e o deploy fica em loop de
+# restart. **Local em arm64 o mesmo Dockerfile subia normal** — o erro só existia
+# na arquitetura de produção, que é o pior tipo de diferença para descobrir tarde.
+#
+# Desabilitar explicitamente é determinístico: não depende de qual MPM o apt
+# decidiu ativar nesta arquitetura, neste dia.
+RUN a2dismod mpm_event mpm_worker 2>/dev/null || true; \
+    a2enmod mpm_prefork rewrite headers expires
 
 # Story 2.10: o teto que morde primeiro não é o proxy, é o PHP da origem.
 # Uma capa realista de 2400×1350 pesa ~9 MB; o padrão de 2M rejeitaria o
@@ -34,8 +48,6 @@ RUN { \
       echo 'opcache.enable = 1'; \
       echo 'opcache.validate_timestamps = 0'; \
     } > /usr/local/etc/php/conf.d/clama.ini
-
-RUN a2enmod rewrite headers expires
 
 # WP-CLI é como se opera isto no Railway: instalar, atualizar core e plugin,
 # limpar cache de sitemap. Sem ele, a única via é o wp-admin pelo navegador —
