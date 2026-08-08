@@ -111,4 +111,26 @@ if [ "${CLAMA_PROVISIONAR:-}" = "1" ]; then
     echo "clama-blog: REMOVA CLAMA_PROVISIONAR das variaveis."
 fi
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Application Password para o Django (integracao I3) — OPT-IN.
+#
+# O Django precisa dela para `buscar_post_por_slug`, que usa `context=edit` e
+# portanto exige autenticacao. Sem ela, comentar num post do WordPress devolve
+# 404: o espelho nao consegue ser criado sob demanda.
+#
+# Roda so com CLAMA_CRIAR_APP_PASSWORD=1. Imprime a senha UMA vez no log —
+# nao ha outro canal, e o container nao tem shell exposto. Remova a variavel
+# depois de copiar, e rotacione se o log for compartilhado.
+# ─────────────────────────────────────────────────────────────────────────────
+if [ "${CLAMA_CRIAR_APP_PASSWORD:-}" = "1" ]; then
+    SENHA_APP=$(wp --path=/app/web/wp --allow-root user application-password create \
+        "${CLAMA_ADMIN_USER:-pedro}" django-clama --porcelain 2>/dev/null || true)
+    if [ -n "$SENHA_APP" ]; then
+        echo "clama-blog: APP_PASSWORD=$SENHA_APP"
+        echo "clama-blog: copie, defina no backend e REMOVA CLAMA_CRIAR_APP_PASSWORD."
+    else
+        echo "clama-blog: falhou ao criar application password" >&2
+    fi
+fi
+
 exec "$@"
