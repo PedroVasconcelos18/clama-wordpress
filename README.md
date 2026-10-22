@@ -14,7 +14,16 @@ O modo padrão de operar WordPress — instalar plugin clicando no admin — é 
 
 [Bedrock](https://roots.io/bedrock/) aplica Twelve-Factor ao WordPress e reconcilia os dois. O custo é um setup inicial maior que um WordPress "clica e usa"; é custo aceito conscientemente.
 
-**Consequência prática:** `DISALLOW_FILE_MODS` é `true` em produção. O botão "Instalar plugin" do admin simplesmente não funciona lá. Toda dependência entra por `composer require` + PR.
+**Instalar plugin pelo painel está ligado** (`DISALLOW_FILE_MODS` e `DISALLOW_FILE_EDIT` com default `false`, mesma decisão da A.Lab). Funciona porque `docker/docker-entrypoint.sh` aponta `plugins`, `themes`, `languages` e `upgrade` para o volume — sem isso o deploy seguinte apagaria o que o painel instalou, sem erro.
+
+| origem do plugin | no deploy |
+| --- | --- |
+| `composer.json` | a **imagem** sobrescreve o volume, todo boot |
+| painel | o **volume** manda, e sobrevive |
+
+Plugin removido do `composer.json` fica órfão no volume e ativo — remoção manual com `wp plugin delete <nome>`. O que entra pelo painel não passa pela [política de plugins](../clama-docs/politica-de-plugins-wordpress.md) nem pelo lock; infraestrutura do blog continua entrando por `composer require` + PR.
+
+Para endurecer de volta sem código: `DISALLOW_FILE_MODS=true` e/ou `DISALLOW_FILE_EDIT=true` nas variáveis do Railway.
 
 ---
 
@@ -81,7 +90,7 @@ wp core install --url=http://localhost:8080 --title="Blog do Clama" \
 php -S 127.0.0.1:8080 -t web
 ```
 
-Em `WP_ENV=development` o Bedrock inverte duas coisas de propósito: `DISALLOW_FILE_MODS` vira `false` (para você poder experimentar plugin localmente) e `DISALLOW_INDEXING` vira `true`. Nenhuma das duas vale em produção.
+Em `WP_ENV=development` `DISALLOW_INDEXING` vira `true` e `DISALLOW_FILE_MODS`/`DISALLOW_FILE_EDIT` ficam `false` mesmo que produção seja endurecida por variável.
 
 ---
 

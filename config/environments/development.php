@@ -18,5 +18,7 @@ Config::define('DISALLOW_INDEXING', true);
 
 ini_set('display_errors', '1');
 
-// Enable plugin and theme updates and installation from the admin
+// Produção também instala pelo painel, então isto virou garantia: se alguém
+// endurecer produção com `DISALLOW_FILE_MODS=true`, local continua aberto.
 Config::define('DISALLOW_FILE_MODS', false);
+Config::define('DISALLOW_FILE_EDIT', false);

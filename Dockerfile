@@ -46,8 +46,16 @@ RUN { \
       echo 'max_execution_time = 120'; \
       echo 'expose_php = Off'; \
       echo 'opcache.enable = 1'; \
-      echo 'opcache.validate_timestamps = 0'; \
+      echo 'opcache.validate_timestamps = 1'; \
+      echo 'opcache.revalidate_freq = 2'; \
     } > /usr/local/etc/php/conf.d/clama.ini
+
+# 🔴 `validate_timestamps = 0` era correto enquanto código só mudava por deploy.
+# Com atualização pelo painel o código muda EM RUNTIME, e o zero vira bug mudo:
+# os arquivos novos são gravados, a tela diz "Atualizado com sucesso", e o PHP
+# segue executando a versão antiga até o container reiniciar. Instalar plugin
+# novo funcionaria (arquivo inédito não está no cache); é a atualização — de
+# segurança, inclusive — que quebra sem sintoma.
 
 # WP-CLI é como se opera isto no Railway: instalar, atualizar core e plugin,
 # limpar cache de sitemap. Sem ele, a única via é o wp-admin pelo navegador —

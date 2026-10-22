@@ -30,7 +30,60 @@ mkdir -p "$DADOS/database" "$DADOS/uploads"
 rm -rf /app/web/app/uploads
 ln -sfn "$DADOS/uploads" /app/web/app/uploads
 
-chown -R www-data:www-data "$DADOS/database" "$DADOS/uploads"
+# ─────────────────────────────────────────────────────────────────────────────
+# Plugins, temas e traducoes: instalaveis pelo painel, e por isso no volume.
+#
+# `DISALLOW_FILE_MODS` esta DESLIGADO (config/application.php). Sem este bloco
+# o painel instalaria, diria "Plugin ativado", e o proximo deploy apagaria.
+#
+# 🔴 PRECEDENCIA:
+#   o que vem do composer.json (e o tema clama) → a IMAGEM ganha, todo boot
+#   o que veio do painel                        → o VOLUME ganha, sobrevive
+#
+# Item a item, e nao `rsync --delete`: o `--delete` apagaria justamente o que o
+# painel instalou. O preco: plugin removido do composer.json fica ORFAO no
+# volume e continua ativo — remocao manual, `wp plugin delete <nome>`.
+# ─────────────────────────────────────────────────────────────────────────────
+persistir_no_volume() {
+    nome="$1"
+    origem="/app/web/app/$nome"
+    destino="$DADOS/$nome"
+
+    mkdir -p "$destino"
+
+    # `-L`: se ja e symlink, a imagem nao tem mais o original e copiar daqui
+    # copiaria o volume sobre si mesmo.
+    if [ -d "$origem" ] && [ ! -L "$origem" ]; then
+        for item in "$origem"/* "$origem"/.[!.]*; do
+            [ -e "$item" ] || continue
+            base=$(basename "$item")
+            rm -rf "${destino:?}/$base"
+            cp -a "$item" "$destino/"
+        done
+    fi
+
+    rm -rf "$origem"
+    ln -sfn "$destino" "$origem"
+}
+
+# ⚠️ `plugins` nao e opcional: `web/app/db.php` faz realpath em
+# `plugins/sqlite-database-integration` em TODA requisicao. Se isto falhar, o
+# `set -e` derruba o container — melhor que subir sem banco.
+persistir_no_volume plugins
+persistir_no_volume themes
+persistir_no_volume languages
+
+# Instalar plugin baixa o .zip para `upgrade/` antes de mover. Sem ele gravavel,
+# o painel falha com "Nao foi possivel criar o diretorio", sem dizer qual.
+mkdir -p "$DADOS/upgrade"
+rm -rf /app/web/app/upgrade
+ln -sfn "$DADOS/upgrade" /app/web/app/upgrade
+
+# www-data em TUDO: um diretorio de dono errado no volume vira falha no meio
+# da instalacao, mesmo com FS_METHOD=direct.
+chown -R www-data:www-data \
+    "$DADOS/database" "$DADOS/uploads" \
+    "$DADOS/plugins" "$DADOS/themes" "$DADOS/languages" "$DADOS/upgrade"
 
 # O Railway injeta PORT e espera que o processo escute nela.
 PORTA="${PORT:-8080}"

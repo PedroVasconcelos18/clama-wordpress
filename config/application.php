@@ -184,11 +184,33 @@ Config::define('NONCE_SALT', env('NONCE_SALT'));
 Config::define('AUTOMATIC_UPDATER_DISABLED', true);
 Config::define('DISABLE_WP_CRON', env('DISABLE_WP_CRON') ?: false);
 
-// Disable the plugin and theme file editor in the admin
-Config::define('DISALLOW_FILE_EDIT', true);
+// Editor de arquivo no admin (Aparência › Editor de arquivos do tema,
+// Plugins › Editor de plugins).
+//
+// ⚠️ Quem edita arquivo executa PHP arbitrário no servidor — é o caminho mais
+// curto entre uma conta de admin comprometida e um shell. Fica ligado porque a
+// operação do blog pediu (mesma decisão da A.Lab), não porque seja inofensivo.
+//
+// Para desligar sem tocar em código: `DISALLOW_FILE_EDIT=true` nas variáveis.
+Config::define('DISALLOW_FILE_EDIT', env('DISALLOW_FILE_EDIT') ?: false);
 
-// Disable plugin and theme updates and installation from the admin
-Config::define('DISALLOW_FILE_MODS', true);
+// Instalação/atualização de plugin, tema e idioma pelo admin.
+//
+// 🔴 Isto só é seguro de ligar porque `docker/docker-entrypoint.sh` aponta
+// `plugins`, `themes` e `languages` para o volume. Com a trava desligada e os
+// diretórios vivendo na imagem, o painel instalaria com sucesso, a tela diria
+// "Plugin ativado", e o próximo deploy apagaria tudo — sem erro e sem log.
+//
+// Convivência com o Composer (no entrypoint): o que vem do `composer.json` é
+// sobrescrito pela imagem a cada boot; o que veio do painel é preservado.
+Config::define('DISALLOW_FILE_MODS', env('DISALLOW_FILE_MODS') ?: false);
+
+// 🔴 Sem isto o wp-admin PEDE CREDENCIAL DE FTP para instalar qualquer coisa.
+// `get_filesystem_method()` compara o dono de um arquivo temporário com o dono
+// do processo PHP; com `plugins` virando symlink para o volume, essa
+// comparação depende de quem é dono de `/data` no host do Railway. `direct` é
+// determinístico, e o entrypoint garante a premissa (volume de www-data).
+Config::define('FS_METHOD', 'direct');
 
 // Limit the number of post revisions
 Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);

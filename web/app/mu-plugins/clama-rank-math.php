@@ -11,9 +11,9 @@ Author:       Clama
  * Story 5.1. **Configuração como código, não como estado de banco.**
  *
  * O caminho normal do Rank Math é rodar um assistente que grava opções. Isso
- * colide com o desenho deste projeto: o `DISALLOW_FILE_MODS` da Story 2.2 já
- * tira o "instalar clicando", o Bedrock põe tudo sob revisão em PR, e a
- * promoção de staging da Story 2.4 **não copia configuração** de propósito.
+ * colide com o desenho deste projeto: o Bedrock põe a infraestrutura sob
+ * revisão em PR, e a promoção de staging da Story 2.4 **não copia
+ * configuração** de propósito.
  *
  * Configuração que só existe no banco é configuração que se perde na primeira
  * restauração e diverge entre ambientes sem ninguém notar. Aqui os defaults
